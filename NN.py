@@ -11,7 +11,7 @@ from sklearn.preprocessing import LabelEncoder
 
 #Changing directory
 os.getcwd()
-os.chdir("E:\Python_Dataset\Leaf Classification")
+os.chdir("/Users/manishshegokar/Documents/Manish_documents/My independent projects/Python_Dataset/Leaf Classification")
 
 #Importing data
 train = pd.read_csv("train.csv")
@@ -22,6 +22,7 @@ test = pd.read_csv("test.csv")
 
 #y = train['species']
 y= train.pop('species')
+
 #Converting categorical values to numerical values
 y = LabelEncoder().fit(y).transform(y)
 
@@ -32,6 +33,7 @@ id = train.pop('id')
 
 X = StandardScaler().fit(train).transform(train)
 
+# Implementing neural network
 model = Sequential()
 model.add(Dense(256,input_dim=192))
 model.add(Activation('relu'))
@@ -42,6 +44,7 @@ model.compile(loss='categorical_crossentropy',optimizer='rmsprop',metrics=['accu
 
 history = model.fit(X,y_cat,batch_size=64,nb_epoch=10,verbose=0)
 
+# Plot
 import matplotlib.pyplot as plt
 plt.plot(history.history['loss'],'o-')
 plt.xlabel('Number of Iterations')
@@ -54,15 +57,15 @@ test = StandardScaler().fit(test).transform(test)
 
 yPred = model.predict_proba(test)
     
-## Converting the test predictions in a dataframe as depicted by sample submission
+## Converting the test predictions in a dataframe
 yPred = pd.DataFrame(yPred,index=test_id,columns=sorted(parent_data.species.unique()))
 
-fp = open('submission.csv','w')
+fp = open('submission_v3.csv','w')
 
 fp.write(yPred.to_csv())
 
 # Export Submission
-yPred.to_csv('submission.csv', index = True)
+yPred.to_csv('submission_v3.csv', index = True)
 
 
 
